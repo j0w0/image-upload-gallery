@@ -1,0 +1,57 @@
+.image-upload-gallery {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+  border-radius: 8px;
+  border: 1px solid gray;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.image-upload-gallery__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.image-upload-gallery__list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.image-upload-gallery__list .images {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 24px;
+  justify-content: space-between;
+}
+
+.gallery-card {
+  display: flex;
+  flex-direction: column;
+  width: 49%;
+  border: 1px solid gray;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.card-image {
+  height: 250px;
+  background-color: #dadada;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-details {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+}
