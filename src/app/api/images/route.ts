@@ -1,10 +1,13 @@
-import { ensureReady, getUploadPaths } from "@/lib/db";
-import { getImages } from "@/lib/getImages";
+import {
+  ensureReady,
+  getImages,
+  getUploadPaths,
+  uploadImage,
+  deleteImage,
+} from "@/lib/db";
 import { type NextRequest } from "next/server";
 import path from "path";
 import fse from "fs-extra";
-import { uploadImage } from "@/lib/uploadImage";
-import { deleteImage } from "@/lib/deleteImage";
 
 // read/list and search
 export async function GET(request: NextRequest) {
