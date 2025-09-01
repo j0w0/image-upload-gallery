@@ -14,27 +14,27 @@ const ROOT = process.cwd();
 const UPLOAD_DIR = path.join(ROOT, "public", "uploads");
 const INDEX_FILE = path.join(UPLOAD_DIR, "index.json");
 
-async function ensureReady() {
+const ensureReady = async () => {
   await fse.ensureDir(UPLOAD_DIR);
   if (!(await fse.pathExists(INDEX_FILE))) {
     await fse.writeJSON(INDEX_FILE, [] as ImageRecord[], { spaces: 2 });
   }
-}
+};
 
-async function readIndex(): Promise<ImageRecord[]> {
+const readIndex = async (): Promise<ImageRecord[]> => {
   await ensureReady();
   return fse.readJSON(INDEX_FILE);
-}
+};
 
-async function writeIndex(records: ImageRecord[]) {
+const writeIndex = async (records: ImageRecord[]) => {
   await fse.writeJSON(INDEX_FILE, records, { spaces: 2 });
-}
+};
 
-function getUploadPaths(newName: string) {
+const getUploadPaths = (newName: string) => {
   const filePath = path.join(UPLOAD_DIR, newName);
   const publicUrl = `/uploads/${newName}`;
   return { filePath, publicUrl };
-}
+};
 
 const getImages = async (query: string) => {
   await ensureReady();
