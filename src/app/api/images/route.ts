@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
-    const file = formData.get("file") as globalThis.File;
+    const file = formData.get("file") as File;
 
     if (!file) {
       return Response.json({ error: "No file provided" }, { status: 400 });
