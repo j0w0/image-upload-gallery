@@ -87,7 +87,7 @@ const ImageUploadGallery: FunctionComponent = () => {
         <div>
           <label>
             <input
-              className="input"
+              className="input p-3 outline outline-gray-400 rounded"
               placeholder="Search by file name..."
               value={searchQuery}
               onChange={handleSearchChange}
@@ -102,7 +102,7 @@ const ImageUploadGallery: FunctionComponent = () => {
             ) : (
               <div
                 role="button"
-                className="bg-slate-200 p-3 rounded cursor-pointer"
+                className="bg-gray-200 p-3 rounded cursor-pointer"
               >
                 Upload image
               </div>
