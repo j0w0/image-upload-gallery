@@ -87,6 +87,7 @@ const ImageUploadGallery: FunctionComponent = () => {
         <div>
           <label>
             <input
+              type="search"
               className="input p-3 outline outline-gray-400 rounded"
               placeholder="Search by file name..."
               value={searchQuery}
