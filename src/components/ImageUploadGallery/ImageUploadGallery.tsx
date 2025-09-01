@@ -43,6 +43,10 @@ const ImageUploadGallery: FunctionComponent = () => {
     [refreshImages]
   );
 
+  const handleUploadClick = useCallback(() => {
+    inputRef.current?.click();
+  }, []);
+
   const handleUpload = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
@@ -88,7 +92,7 @@ const ImageUploadGallery: FunctionComponent = () => {
           <label>
             <input
               type="search"
-              className="input p-3 outline outline-gray-400 rounded"
+              className="input p-3 rounded border border-gray-400"
               placeholder="Search by file name..."
               value={searchQuery}
               onChange={handleSearchChange}
@@ -101,16 +105,17 @@ const ImageUploadGallery: FunctionComponent = () => {
             {uploading ? (
               "Uploading..."
             ) : (
-              <div
-                role="button"
+              <button
                 className="bg-gray-200 p-3 rounded cursor-pointer"
+                onClick={handleUploadClick}
               >
                 Upload image
-              </div>
+              </button>
             )}
             <input
               ref={inputRef}
               type="file"
+              id="upload"
               name="upload"
               accept="image/*"
               onChange={handleUpload}
