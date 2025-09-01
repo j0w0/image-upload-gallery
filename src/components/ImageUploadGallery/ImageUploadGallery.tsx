@@ -8,10 +8,10 @@ import {
   useRef,
   useState,
 } from "react";
+import Image from "next/image";
 import { ImageRecord } from "@/lib/db";
 import { fetchImages, uploadImage, deleteImage } from "@/lib/api";
-import Image from "next/image";
-
+import { Button } from "@/components/Button";
 import "./ImageUploadGallery.css";
 
 const ImageUploadGallery: FunctionComponent = () => {
@@ -105,12 +105,7 @@ const ImageUploadGallery: FunctionComponent = () => {
             {uploading ? (
               "Uploading..."
             ) : (
-              <button
-                className="bg-gray-200 p-3 rounded cursor-pointer"
-                onClick={handleUploadClick}
-              >
-                Upload image
-              </button>
+              <Button onClick={handleUploadClick}>Upload image</Button>
             )}
             <input
               ref={inputRef}
