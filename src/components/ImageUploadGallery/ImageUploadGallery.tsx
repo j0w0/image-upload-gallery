@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import { ImageRecord } from "@/lib/db";
+import { fetchImages, uploadImage, deleteImage } from "@/lib/api";
 import Image from "next/image";
 
 import "./ImageUploadGallery.css";
@@ -19,11 +20,13 @@ const ImageUploadGallery: FunctionComponent = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   async function refresh(query: string = "") {
-    const res = await fetch(
-      `/api/images${query ? `?search=${encodeURIComponent(query)}` : ""}`
-    );
-    const data: { images: ImageRecord[] } = await res.json();
-    setImages(data.images);
+    try {
+      const images = await fetchImages(query);
+      setImages(images);
+    } catch (error) {
+      console.error("Failed to fetch images:", error);
+      alert("Failed to load images");
+    }
   }
 
   useEffect(() => {
@@ -47,20 +50,12 @@ const ImageUploadGallery: FunctionComponent = () => {
     }
 
     try {
-      const form = new FormData();
-      form.append("file", file);
       setUploading(true);
-
-      const res = await fetch("/api/images", {
-        method: "POST",
-        body: form,
-      });
-
-      if (!res.ok) throw new Error(await res.text());
+      await uploadImage(file);
       await refresh(searchQuery);
       if (inputRef.current) inputRef.current.value = "";
     } catch (error) {
-      console.error(error);
+      console.error("Upload error:", error);
       alert("Upload failed");
     } finally {
       setUploading(false);
@@ -71,13 +66,10 @@ const ImageUploadGallery: FunctionComponent = () => {
     if (!confirm("Delete this image?")) return;
 
     try {
-      const res = await fetch(`/api/images/?delete=${id}`, {
-        method: "DELETE",
-      });
-
-      if (res.ok) setImages((imgs) => imgs.filter((i) => i.id !== id));
+      await deleteImage(id);
+      setImages((imgs) => imgs.filter((i) => i.id !== id));
     } catch (error) {
-      console.error(error);
+      console.error("Delete error:", error);
       alert("Delete failed");
     }
   }
