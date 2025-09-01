@@ -3,6 +3,7 @@
 import {
   ChangeEvent,
   FunctionComponent,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -19,7 +20,7 @@ const ImageUploadGallery: FunctionComponent = () => {
   const [uploading, setUploading] = useState<boolean>();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  async function refresh(query: string = "") {
+  const refreshImages = useCallback(async (query: string = "") => {
     try {
       const images = await fetchImages(query);
       setImages(images);
@@ -27,42 +28,48 @@ const ImageUploadGallery: FunctionComponent = () => {
       console.error("Failed to fetch images:", error);
       alert("Failed to load images");
     }
-  }
-
-  useEffect(() => {
-    refresh();
   }, []);
 
-  async function onSearchChange(event: ChangeEvent<HTMLInputElement>) {
-    const value = event.target.value;
-    setSearchQuery(value);
-    await refresh(value);
-  }
+  useEffect(() => {
+    refreshImages();
+  }, [refreshImages]);
 
-  async function handleUpload(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  const handleSearchChange = useCallback(
+    async (event: ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      setSearchQuery(value);
+      await refreshImages(value);
+    },
+    [refreshImages]
+  );
 
-    if (!file.type.startsWith("image/")) {
-      alert("Only image files are allowed");
-      event.target.value = "";
-      return;
-    }
+  const handleUpload = useCallback(
+    async (event: ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
 
-    try {
-      setUploading(true);
-      await uploadImage(file);
-      await refresh(searchQuery);
-      if (inputRef.current) inputRef.current.value = "";
-    } catch (error) {
-      console.error("Upload error:", error);
-      alert("Upload failed");
-    } finally {
-      setUploading(false);
-    }
-  }
+      if (!file.type.startsWith("image/")) {
+        alert("Only image files are allowed");
+        event.target.value = "";
+        return;
+      }
 
-  async function handleDelete(id: string) {
+      try {
+        setUploading(true);
+        await uploadImage(file);
+        await refreshImages(searchQuery);
+        if (inputRef.current) inputRef.current.value = "";
+      } catch (error) {
+        console.error("Upload error:", error);
+        alert("Upload failed");
+      } finally {
+        setUploading(false);
+      }
+    },
+    [refreshImages, searchQuery]
+  );
+
+  const handleDelete = useCallback(async (id: string) => {
     if (!confirm("Delete this image?")) return;
 
     try {
@@ -72,7 +79,7 @@ const ImageUploadGallery: FunctionComponent = () => {
       console.error("Delete error:", error);
       alert("Delete failed");
     }
-  }
+  }, []);
 
   return (
     <div className="image-upload-gallery">
@@ -83,7 +90,7 @@ const ImageUploadGallery: FunctionComponent = () => {
               className="input"
               placeholder="Search by file name..."
               value={searchQuery}
-              onChange={onSearchChange}
+              onChange={handleSearchChange}
               aria-label="Search images by file name"
             />
           </label>

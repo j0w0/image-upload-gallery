@@ -37,7 +37,7 @@ const uploadImage = async (file: File): Promise<void> => {
 
 // delete an image by id
 const deleteImage = async (id: string): Promise<void> => {
-  const response = await fetch(`/api/images/?delete=${id}`, {
+  const response = await fetch(`/api/images?delete=${id}`, {
     method: "DELETE",
   });
 
